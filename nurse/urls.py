@@ -1,8 +1,7 @@
 from django.urls import path
-from .views import (
-    nurse_interface
-)
+from . import views
 
 urlpatterns = [
-   path('nurse-dashboard/', nurse_interface, name="nurse_interface")
+   path('', views.home, name="home"),
+   path('nurse-dashboard/', views.nurse_interface, name="nurse_interface")
 ]
