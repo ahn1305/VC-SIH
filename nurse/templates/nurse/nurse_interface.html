@@ -11,6 +11,7 @@
 <table class="table">
     <thead class="thead-dark">
     <tr>
+        <th>Device ID</th>
         <th>Prescribed Medicine</th>
         <th>Inject Time</th>
         <th>Saline ML</th>
@@ -23,12 +24,13 @@
 
     {% for i in obj %}
     <tr>
+        <td>{{ i.device_id.device_id }}</td>
         <td>{{ i.prescribed_medicine }}</td>
         <td>{{ i.inject_time }}</td>
         <td>{{ i.saline_ml }} ml</td>
-        <td>{{ i.patient_name }}</td>
-        <td>{{ i.patient_room_number }}</td>
-        <td>{{ i.patient_age }}</td>
+        <td>{{ i.patient.patient_name }}</td>
+        <td>{{ i.patient.patient_room_number }}</td>
+        <td>{{ i.patient.patient_age }}</td>
         <td>{{ i.flow_rate_time }}</td>
     </tr>
     {% endfor %}

@@ -40,7 +40,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'doctor.apps.DoctorConfig',
     'nurse.apps.NurseConfig',
-
+    'patient.apps.PatientConfig',
+    'device.apps.DeviceConfig',
     #additional apps
     "bootstrap_datepicker_plus",
 ]
