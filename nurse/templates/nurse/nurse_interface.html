@@ -1,40 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+
 <head>
-    <meta http-equiv="refresh" content="5">
-  </head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nurse Interface</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css"
+        integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N" crossorigin="anonymous">
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css" integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N" crossorigin="anonymous">
+</head>
+
+<body>
+
+    <h1 align="center">Nurse Interface</h1>
+
+    <div class="container">
+        <table class="table" id="dataTable">
+            <thead class="thead-dark">
+                <tr>
+                    <th>Device ID</th>
+                    <th>Prescribed Medicine</th>
+                    <th>Inject Time</th>
+                    <th>Saline ML</th>
+                    <th>Patient Name</th>
+                    <th>Patient Room Number</th>
+                    <th>Patient Age</th>
+                    <th>Flow rate time</th>
+                    <th>Flow rate</th>
+                </tr>
+            </thead>
+
+            {% for i in obj %}
+            <tr>
+                <td>{{ i.device_id.device_id }}</td>
+                <td>{{ i.prescribed_medicine }}</td>
+                <td>{{ i.inject_time }}</td>
+                <td>{{ i.saline_ml }} ml</td>
+                <td>{{ i.patient.patient_name }}</td>
+                <td>{{ i.patient.patient_room_number }}</td>
+                <td>{{ i.patient.patient_age }}</td>
+                <td id="flowRateTime">{{ i.flow_rate_time }}</td>
+                <td id="flowRateValue"></td>
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+
+    <div class="container">
+        <canvas id="flowRateChart" width="400" height="200"></canvas>
+    </div>
 
 
-<h1 align="center">Nurse Interface</h1>
+    <!-- Option 1: jQuery and Bootstrap Bundle (includes Popper) -->
+    <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-Fy6S3B9q64WdZWQUiU+q4/2Lc9npb8tCaSX9FK7E8HnRr0Jz8D6OP9dO5Vg3Q9ct" crossorigin="anonymous"></script>
 
-<div class="container">
-<table class="table">
-    <thead class="thead-dark">
-    <tr>
-        <th>Device ID</th>
-        <th>Prescribed Medicine</th>
-        <th>Inject Time</th>
-        <th>Saline ML</th>
-        <th>Patient Name</th>
-        <th>Patient Room Number</th>
-        <th>Patient Age</th>
-        <th>Flow rate time</th>
-    </tr>
-</thead>
+        <!-- 
+    <script>
+        async function updateFlowRate() {
+            const response = await fetch('http://192.168.1.11:8080/random-data');
+            const data = await response.json();
+            document.getElementById('flowRateValue').innerText = data.value.toFixed(2); // Adjust as needed
+        }
 
-    {% for i in obj %}
-    <tr>
-        <td>{{ i.device_id.device_id }}</td>
-        <td>{{ i.prescribed_medicine }}</td>
-        <td>{{ i.inject_time }}</td>
-        <td>{{ i.saline_ml }} ml</td>
-        <td>{{ i.patient.patient_name }}</td>
-        <td>{{ i.patient.patient_room_number }}</td>
-        <td>{{ i.patient.patient_age }}</td>
-        <td>{{ i.flow_rate_time }}</td>
-    </tr>
-    {% endfor %}
-</table>
-   <!-- Option 1: jQuery and Bootstrap Bundle (includes Popper) -->
-   <script src="https://code.jquery.com/jquery-3.1.1.min.js">
-       <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-Fy6S3B9q64WdZWQUiU+q4/2Lc9npb8tCaSX9FK7E8HnRr0Jz8D6OP9dO5Vg3Q9ct" crossorigin="anonymous"></script>
+        // Update flow rate every 3 seconds
+        setInterval(updateFlowRate, 3000);
+    </script> -->
+    <script>
+        const flowRateValues = [];
+        const ctx = document.getElementById('flowRateChart').getContext('2d');
+        let flowRateChart;
+
+        function updateChart() {
+            if (!flowRateChart) {
+                flowRateChart = new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                        labels: flowRateValues.map((_, index) => index),
+                        datasets: [{
+                            label: 'Flow Rate',
+                            data: flowRateValues,
+                            backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                            borderColor: 'rgba(75, 192, 192, 1)',
+                            borderWidth: 1
+                        }]
+                    },
+                    options: {
+                        scales: {
+                            y: {
+                                beginAtZero: true
+                            }
+                        }
+                    }
+                });
+            } else {
+                flowRateChart.data.labels = flowRateValues.map((_, index) => index);
+                flowRateChart.data.datasets[0].data = flowRateValues;
+                flowRateChart.update();
+            }
+        }
+
+        async function updateFlowRate() {
+            const response = await fetch('http://192.168.1.11:8080/random-data');
+            const data = await response.json();
+
+            flowRateValues.push(parseFloat(data.value.toFixed(2)));
+            document.getElementById('flowRateValue').innerText = flowRateValues[flowRateValues.length - 1];
+
+            updateChart();
+        }
+
+        setInterval(updateFlowRate, 3000);
+    </script>
+    
+    
+</body>
+
+</html>
