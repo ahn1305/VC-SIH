@@ -18,7 +18,7 @@ def send_serial_data(data, port='COM1', baudrate=9600):
         print(f"Error: {e}")
 
 
-def readserial(comport, baudrate	):
+def readserial(comport, baudrate):
 
     ser = serial.Serial(comport, baudrate, timeout=0.1)       
 	
