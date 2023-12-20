@@ -108,12 +108,14 @@ def compare_and_display(request):
         if latest_entry_data:
             if SalinePatientEntry.objects.get(id=patient_id).saline_ml == latest_entry_data.get("field1"):
                 send_serial_data("*", port='COM4', baudrate=9600)
+                time.sleep(3)
+                
                 relevant_data.append({
                     'patient_name': SalinePatientEntry.objects.get(id=patient_id),
                     'patient_id': patient_id,
                     'ml_value': latest_entry_data.get("field1"),
                     'entry_id': latest_entry_id,
-                    'warning':"Saline level low"
+                    'warning': readserial('COM4', 9600)
                 })
             else:
                 relevant_data.append({
@@ -121,8 +123,8 @@ def compare_and_display(request):
                 'patient_id': patient_id,
                 'ml_value': latest_entry_data.get("field1"),
                 'entry_id': latest_entry_id,
-                'warning':"Normal"
-                })
+                'warning':"Sa low"
+                    })
 
 
 

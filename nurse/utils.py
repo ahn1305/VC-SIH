@@ -17,3 +17,14 @@ def send_serial_data(data, port='COM1', baudrate=9600):
     except serial.SerialException as e:
         print(f"Error: {e}")
 
+
+def readserial(comport, baudrate	):
+
+    ser = serial.Serial(comport, baudrate, timeout=0.1)       
+	
+
+    data = ser.readline().decode().strip()
+    if data:
+        print(data)
+    return data
+
