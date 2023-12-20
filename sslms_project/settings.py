@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'device.apps.DeviceConfig',
     #additional apps
     "bootstrap_datepicker_plus",
+    "rest_framework"
 ]
 
 MIDDLEWARE = [

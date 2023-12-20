@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Patient Data</title>
+    <meta http-equiv="refresh" content="5">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css"
+    integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+
+    <br />
+<h1 style="text-align:center;">Live Patient Data Table</h1>
+
+<div class="container">
+    <br><br>
+<table class="table table-striped" border="1">
+    <thead>
+        <tr>
+            <th>Patient ID</th>
+            <th>Prescibed Medicine</th>
+            <th>Inject Time</th>
+            <th>Saline ML</th>
+            <th>Patient Name</th>
+            <th>Patient Room Number</th>
+            <th>Patient Age</th>
+            <th>ML Value</th>
+            <th>Status</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for entry in data %}
+            <tr>
+                <td>{{ entry.patient_id }}</td>
+                <td>{{ entry.patient_name.prescribed_medicine }}</td>
+                <td>{{ entry.patient_name.inject_time }}</td>
+                <td>{{ entry.patient_name.saline_ml }}</td>
+
+                <td>{{ entry.patient_name.patient.patient_name }}</td>
+                <td>{{ entry.patient_name.patient.patient_room_number }}</td>
+                <td>{{ entry.patient_name.patient.patient_age }}</td>
+                <td>{{ entry.ml_value }}</td>
+                {% if entry.warning == "Saline level low" %}
+                <td><p style="color:red;">{{ entry.warning }}</p></td>
+                {% else %}
+                <td><p style="color:green;">{{ entry.warning }}</p></td>
+
+                {% endif %}
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
+</div>
+
+</body>
+</html>
