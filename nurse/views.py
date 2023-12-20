@@ -9,6 +9,7 @@ from django.http import HttpResponse
 from django.db.models import Max
 from django.utils import timezone
 from .utils import send_serial_data
+import time
 
 def home(request):
     return render(request, "nurse/home.html")
